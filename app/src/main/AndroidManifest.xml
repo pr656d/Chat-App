@@ -20,9 +20,11 @@
         </activity>
         <activity
             android:name=".loginActivity"
-            android:label="Login"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:label="Login"/>
+
+        <activity
+            android:name=".CreateUserActivity"
+            android:label="Create user"/>
     </application>
 
 </manifest>
