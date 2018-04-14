@@ -1,9 +1,13 @@
-package com.androidev.learn.smack
+package com.androidev.learn.smack.Controller
 
 import android.graphics.Color
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
+import com.androidev.learn.smack.R
+import com.androidev.learn.smack.Services.AuthService
 import kotlinx.android.synthetic.main.activity_create_user.*
 import java.util.*
 
@@ -48,6 +52,13 @@ class CreateUserActivity : AppCompatActivity() {
     }
 
     fun createUserClicked(view: View) {
-
+        Log.d("createUserClicked", "Clicked")
+        AuthService.registerRequest(this, "p@p.com", "123456") {
+            if (it) {
+                Snackbar.make(view, "$it", Snackbar.LENGTH_LONG).show()
+            } else {
+                Snackbar.make(view, "$it", Snackbar.LENGTH_LONG).show()
+            }
+        }
     }
 }
