@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
 import com.androidev.learn.smack.R
 import com.androidev.learn.smack.Services.AuthService
@@ -52,12 +51,20 @@ class CreateUserActivity : AppCompatActivity() {
     }
 
     fun createUserClicked(view: View) {
-        Log.d("createUserClicked", "Clicked")
-        AuthService.registerRequest(this, "p@p.com", "123456") {
-            if (it) {
-                Snackbar.make(view, "$it", Snackbar.LENGTH_LONG).show()
+        val email = createEmailTxt.text.toString()
+        val password = createPasswordTxt.text.toString()
+
+        AuthService.registerRequest(this, email, password) { registerSuccess ->
+            if (registerSuccess) {
+                Snackbar.make(view, "Created new user", Snackbar.LENGTH_LONG).show()
+                AuthService.loginUser(this, email, password) { loginSuccess ->
+                    if (loginSuccess) {
+                        println(AuthService.authToken)
+                        println(AuthService.userEmail)
+                    }
+                }
             } else {
-                Snackbar.make(view, "$it", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(view, "Can't create new user", Snackbar.LENGTH_LONG).show()
             }
         }
     }
