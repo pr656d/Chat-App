@@ -1,12 +1,15 @@
 package com.androidev.learn.smack.Controller
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.support.design.widget.Snackbar
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.widget.Toast
 import com.androidev.learn.smack.R
 import com.androidev.learn.smack.Services.AuthService
+import com.androidev.learn.smack.Utilities.BROADCASST_USER_DATA_CHANGE
 import kotlinx.android.synthetic.main.activity_create_user.*
 import java.util.*
 
@@ -18,18 +21,16 @@ class CreateUserActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_user)
+        createSpinner.visibility = View.INVISIBLE
     }
 
     fun generateUserAvatar(view: View) {
         val random = Random()
-        var color = random.nextInt(2)
-        var avatar = random.nextInt(28)
+        val color = random.nextInt(2)
+        val avatar = random.nextInt(28)
 
-        if (color == 0) {
-            userAvatar = "light$avatar"
-        } else {
-            userAvatar= "dark$avatar"
-        }
+        userAvatar = if (color == 0) { "light$avatar" }
+                        else { "dark$avatar" }
 
         val resourceId = resources.getIdentifier(userAvatar, "drawable", packageName)
         createAvatarImageView.setImageResource(resourceId)
@@ -51,21 +52,51 @@ class CreateUserActivity : AppCompatActivity() {
     }
 
     fun createUserClicked(view: View) {
+        enableSpinner(true)
+        val userName = createUsernameTxt.text.toString()
         val email = createEmailTxt.text.toString()
         val password = createPasswordTxt.text.toString()
 
-        AuthService.registerRequest(this, email, password) { registerSuccess ->
-            if (registerSuccess) {
-                Snackbar.make(view, "Created new user", Snackbar.LENGTH_LONG).show()
-                AuthService.loginUser(this, email, password) { loginSuccess ->
-                    if (loginSuccess) {
-                        println(AuthService.authToken)
-                        println(AuthService.userEmail)
+        if (userName.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
+            AuthService.registerRequest(this, email, password) { registerSuccess ->
+                if (registerSuccess) {
+                    AuthService.loginUser(this, email, password) { loginSuccess ->
+                        if (loginSuccess) {
+                            AuthService.createUser(this, userName, email, userAvatar, avatarColor) { createSuccess ->
+                                if (createSuccess) {
+                                    val userDataChange = Intent(BROADCASST_USER_DATA_CHANGE)
+                                    LocalBroadcastManager.getInstance(this).sendBroadcast(userDataChange)
+                                    enableSpinner(false)
+                                    Toast.makeText(this, "user created successfully", Toast.LENGTH_LONG).show()
+                                    finish()
+                                } else { errorToast() }
+                            }
+                        } else { errorToast() }
                     }
-                }
-            } else {
-                Snackbar.make(view, "Can't create new user", Snackbar.LENGTH_LONG).show()
+                } else { errorToast() }
             }
+        } else {
+            Toast.makeText(this, "Please fill all the details.", Toast.LENGTH_SHORT).show()
+            enableSpinner(false)
         }
+    }
+
+    private fun errorToast() {
+        Toast.makeText(this, "Something went wrong, try again.", Toast.LENGTH_LONG).show()
+        enableSpinner(false)
+    }
+
+    private fun enableSpinner(enable: Boolean) {
+        if (enable) {
+            createSpinner.visibility = View.VISIBLE
+        } else {
+            createSpinner.visibility = View.INVISIBLE
+        }
+        createUsernameTxt.isEnabled = !enable
+        createEmailTxt.isEnabled = !enable
+        createPasswordTxt.isEnabled = !enable
+        createUserBtn.isEnabled = !enable
+        createAvatarImageView.isEnabled = !enable
+        backgroundColorBtn.isEnabled = !enable
     }
 }
