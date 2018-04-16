@@ -31,11 +31,11 @@ class MainActivity : AppCompatActivity() {
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(userDataChangeReciver,
+        LocalBroadcastManager.getInstance(this).registerReceiver(userDataChangeReceiver,
                 IntentFilter(BROADCASST_USER_DATA_CHANGE))
     }
 
-    private val userDataChangeReciver = object : BroadcastReceiver() {
+    private val userDataChangeReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             userNameNavHeader.text = UserDataService.name
             userEmailNavHeader.text = UserDataService.email
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         if (AuthService.isLoggedIn) {
             // logout
             UserDataService.logout()
-            userNameNavHeader.text = "login"
+            userNameNavHeader.text = ""
             userEmailNavHeader.text = ""
             userImageNavHeader.setImageResource(R.drawable.profiledefault)
             userImageNavHeader.setBackgroundColor(Color.TRANSPARENT)

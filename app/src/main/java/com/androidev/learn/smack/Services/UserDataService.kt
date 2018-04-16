@@ -29,7 +29,7 @@ object UserDataService {
                 replace("]", "").
                 replace(",","")
 
-//        0.8 0.09019607843137255 0.596078431372549 1    after upper operation it looks like this
+//        0.8 0.09019607843137255 0.596078431372549 1    after this operation it looks like this
 
         var r = 0
         var g = 0
