@@ -67,7 +67,6 @@ class CreateUserActivity : AppCompatActivity() {
                                     val userDataChange = Intent(BROADCASST_USER_DATA_CHANGE)
                                     LocalBroadcastManager.getInstance(this).sendBroadcast(userDataChange)
                                     enableSpinner(false)
-                                    Toast.makeText(this, "user created successfully", Toast.LENGTH_LONG).show()
                                     finish()
                                 } else { errorToast() }
                             }

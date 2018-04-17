@@ -11,7 +11,7 @@ import com.androidev.learn.smack.R
 import com.androidev.learn.smack.Services.AuthService
 import kotlinx.android.synthetic.main.activity_login.*
 
-class loginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +24,8 @@ class loginActivity : AppCompatActivity() {
         enableSpinner(true)
         val email = loginEmailTxt.text.toString()
         val password = loginPasswordTxt.text.toString()
+
+        hideKeyboard()
 
         if (email.isNotEmpty() && password.isNotEmpty()) {
             AuthService.loginUser(this, email, password) { loginSuccess ->
