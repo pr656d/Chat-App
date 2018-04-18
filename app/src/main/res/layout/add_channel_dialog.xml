@@ -33,7 +33,7 @@
         android:layout_marginLeft="18dp"
         android:layout_marginRight="18dp"
         android:ems="10"
+        android:hint="description"
         android:inputType="textPersonName"
-        android:text="Name"
         android:textColor="@android:color/darker_gray" />
 </LinearLayout>

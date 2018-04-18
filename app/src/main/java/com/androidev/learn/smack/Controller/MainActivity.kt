@@ -13,7 +13,9 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.Toast
 import com.androidev.learn.smack.Model.Channel
 import com.androidev.learn.smack.R
 import com.androidev.learn.smack.Services.AuthService
@@ -30,6 +32,12 @@ import kotlinx.android.synthetic.main.nav_header_main.*
 class MainActivity : AppCompatActivity() {
 
     val socket = IO.socket(SOCKET_URL)
+    lateinit var channelAdapter: ArrayAdapter<Channel>
+
+    private fun setAdapters() {
+        channelAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, MessageService.channels)
+        channel_list.adapter = channelAdapter
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +50,7 @@ class MainActivity : AppCompatActivity() {
                 this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
+        setAdapters()
     }
 
     override fun onResume() {
@@ -57,15 +66,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val userDataChangeReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
+        override fun onReceive(context: Context, intent: Intent?) {
             userNameNavHeader.text = UserDataService.name
             userEmailNavHeader.text = UserDataService.email
             loginBtnNavHeader.text = "Logout"
 //            val resourceId = resources.getIdentifier(UserDataService.avatarName, "drawable", packageName)
 //            userImageNavHeader.setImageResource(resourceId)
+//            userImageNavHeader.setImageResource(resourceId)
+//            short form of above three line in just 1 line
             userImageNavHeader.setImageResource(resources.
                     getIdentifier(UserDataService.avatarName, "drawable", packageName))
             userImageNavHeader.setBackgroundColor(UserDataService.returnAvatarColor(UserDataService.avatarColor))
+
+            MessageService.getChannels(context) { complete ->
+                if (complete) {
+                    channelAdapter.notifyDataSetChanged()
+                }
+            }
         }
     }
 
@@ -104,10 +121,11 @@ class MainActivity : AppCompatActivity() {
                         val channelName = nameTextField.text.toString()
                         val channelDesc = descTextField.text.toString()
 
-                        socket.emit("addChannel", channelName, channelDesc)
+                        socket.emit("newChannel", channelName, channelDesc)
+                        Toast.makeText(this, "socket emit", Toast.LENGTH_SHORT).show()
                     }
                     .setNegativeButton("cancel") { dialog, which ->
-
+//
                     }
                     .show()
         }
@@ -121,6 +139,7 @@ class MainActivity : AppCompatActivity() {
 
             val newChannel = Channel(channelName, channelDescription, channelId)
             MessageService.channels.add(newChannel)
+            channelAdapter.notifyDataSetChanged()
         }
     }
 
