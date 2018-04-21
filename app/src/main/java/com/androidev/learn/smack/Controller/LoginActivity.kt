@@ -16,7 +16,6 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
         loginSpinner.visibility = View.INVISIBLE
     }
 
@@ -28,15 +27,24 @@ class LoginActivity : AppCompatActivity() {
         hideKeyboard()
 
         if (email.isNotEmpty() && password.isNotEmpty()) {
-            AuthService.loginUser(this, email, password) { loginSuccess ->
+            AuthService.loginUser(email, password) { loginSuccess ->
                 if (loginSuccess) {
                     AuthService.findUserByEmail(this) { findSuccess ->
                         if (findSuccess) {
                             enableSpinner(false)
                             finish()
-                        } else { errorToast() }
+                        } else {
+                            enableSpinner(false)
+                            Toast.makeText(this, "Error at findUserByEmail", Toast.LENGTH_LONG).show()
+//                            errorToast()
+                        }
                     }
-                } else { errorToast() }
+                } else {
+                    enableSpinner(false)
+//                    errorToast()
+                    Toast.makeText(this, "Error at loginUser", Toast.LENGTH_LONG).show()
+                    finish()
+                }
             }
         } else {
             enableSpinner(false)
@@ -69,6 +77,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun hideKeyboard() {
         val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
         if (inputManager.isAcceptingText) {
             inputManager.hideSoftInputFromWindow(currentFocus.windowToken, 0)
         }
