@@ -1,8 +1,8 @@
 package com.androidev.learn.smack.Utilities
 
 // Online
-const val BASE_URL = "https://androidevchatapp.herokuapp.com/v1/"
-const val SOCKET_URL = "https://androidevchatapp.herokuapp.com/"
+const val BASE_URL = "https://yourAppName.herokuapp.com/v1/"
+const val SOCKET_URL = "https://yourAppName.herokuapp.com/"
 
 // LocalHost
 // const val BASE_URL = "http://10.0.2.2:3005/v1/"
