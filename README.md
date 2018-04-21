@@ -1,7 +1,11 @@
 # Chat-App
-A simple chat for android using Kotlin
+A simple chat for android using Kotlin.
 
-### Update some information to app work.
-* Update in Constants.kt
-    - ```BASE_URL = https://yourHerokuAppName.herokuapp.com/v1/```
-    - ```SOCKET_URL = https://yourHerokuAppName.herokuapp.com/```
+I have used here mac-chat-api. Have a look at here and follow instructions  https://github.com/devslopes-learn/mac-chat-api . Host your App on heroku or as local host.
+
+### Update Constants.kt
+- ```BASE_URL = "https://yourHerokuAppName.herokuapp.com/v1/"```. Update yourHerokuName or replace string with your heroky app URL.
+
+- ```SOCKET_URL = "https://yourHerokuAppName.herokuapp.com/"```. Update only yourHerokuAppName with your heroku app name.
+
+- Uncomment ```BASE_URL``` as per your need to connect with local host or online host.
