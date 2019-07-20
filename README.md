@@ -11,11 +11,11 @@ I have used here mac-chat-api. Have a look at here and follow instructions  http
 - Uncomment ```BASE_URL``` as per your need to connect with local host or online host.
 
 ## Learned
-    - Hosting on Heroku
-    - Authentication
-    - Sign up and Login
-    - Socket.io
-    - Send and Receive messages
-    - Multiple channels supported
-    - JSON request and JSON response parsing
-    - Git
+  - Hosting on Heroku
+  - Authentication
+  - Sign up and Login
+  - Socket.io
+  - Send and Receive messages
+  - Multiple channels supported
+  - JSON request and JSON response parsing
+  - Git
